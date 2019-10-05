@@ -31,7 +31,7 @@ enum {
 int main()
 {
     Timer t;
-    int arr[ARR_SIZE][ARR_SIZE]
+    int arr[ARR_SIZE][ARR_SIZE];
     volatile int sum = 0;
     for (int i = 0; i < ARR_SIZE; ++i) {
         for (int j = 0; j < ARR_SIZE; ++j) {
