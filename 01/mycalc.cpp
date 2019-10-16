@@ -103,6 +103,7 @@ main(int argc, char* argv[])
         std::cout << ans << std::endl;
     } else {
         std::cout << "The expression is incorrect" << std::endl;
+        return 1;
     }
     return 0;
 }
