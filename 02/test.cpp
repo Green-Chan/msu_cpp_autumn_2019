@@ -30,6 +30,11 @@ int main() {
         no_errors = 0;
         std::cout << "error on test 5" << std::endl;
     }
+    all = LinearAllocator(0);
+    if (all.alloc(1)) {
+        no_errors = 0;
+        std::cout << "error on test 6" << std::endl;
+    }
     if (no_errors) {
         std::cout << "no errors" << std::endl;
     }
