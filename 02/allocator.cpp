@@ -21,5 +21,7 @@ void LinearAllocator::reset() {
 }
 
 LinearAllocator::~LinearAllocator() {
-    std::free(buf);
+    if (buf) {
+        std::free(buf);
+    }
 }
