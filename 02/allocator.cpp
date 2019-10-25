@@ -8,7 +8,7 @@ LinearAllocator::LinearAllocator(size_t maxSize) {
 }
 
 char *LinearAllocator::alloc(size_t size) {
-    if (cur_ptr + size > buf + max_size) {
+    if (!buf || cur_ptr + size > buf + max_size) {
         return nullptr;
     }
     char *old_ptr = cur_ptr;
