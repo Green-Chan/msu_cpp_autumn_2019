@@ -23,7 +23,7 @@ public:
     bool operator!=(const Matrix& other) const;
     const Row operator[](size_t i) const;
     Row operator[](size_t i);
-    const Matrix& operator*=(int other);
+    Matrix& operator*=(int other);
 private:
     int32_t *matrix;
     size_t rows_n;
