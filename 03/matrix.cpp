@@ -5,7 +5,7 @@
 Matrix::Matrix(size_t rows_num, size_t columns_num) {
     rows_n = rows_num;
     columns_n = columns_num;
-    matrix = static_cast<int32_t *> (std::malloc(rows_n * columns_n));
+    matrix = static_cast<int32_t *> (std::malloc(rows_n * columns_n * sizeof(int32_t));
     if (!matrix) {
         rows_n = columns_n = 0;
     }
@@ -56,7 +56,7 @@ Row Matrix::operator[](size_t i) {
     return Row(matrix + i * columns_n, columns_n);
 }
 
-const Matrix& Matrix::operator*=(const int other) {
+Matrix& Matrix::operator*=(const int other) {
     for (size_t i = 0; i < rows_n * columns_n; i++) {
         matrix[i] *= other;
     }
