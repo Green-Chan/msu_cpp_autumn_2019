@@ -4,11 +4,10 @@
 
 using namespace std;
 
+struct A {};
+void foo(const A&) {}
+
 int main() {
-    struct A {};
-
-    void foo(const A&) {}
-
     ThreadPool pool(8);
 
     auto task1 = pool.exec(foo, A());
