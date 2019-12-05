@@ -13,7 +13,7 @@ ThreadPool::ThreadPool(size_t poolSize = 0) {
                     q_lock.unlock();
                     func();
                 } else {
-                    isready.wait(q_lock, [this](){ return !isalive || !func_queue.empty(); };
+                    isready.wait(q_lock, [this](){ return !isalive || !func_queue.empty(); });
                 }
             }
         });
@@ -27,4 +27,3 @@ ThreadPool::~ThreadPool() {
         thread_vec[i].join();
     }
 }
-
