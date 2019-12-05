@@ -17,16 +17,16 @@
 class ThreadPool
 {
 public:
-    explicit ThreadPool(size_t poolSize = 0);
+    explicit ThreadPool(size_t poolSize);
     ~ThreadPool();
     ThreadPool(ThreadPool &&adr) = delete;
-    ThreadPool(ThreadPool &&adr) = delete;
+    ThreadPool(const ThreadPool &adr) = delete;
 
      // pass arguments by value
     template <class Func, class... Args>
     auto exec(Func func, Args... args) -> std::future<decltype(func(args...))> {
         auto promise = std::make_shared< std::promise<decltype(func(args...))> >();
-        std::future<decltype(func(args...))> future = promise.get_future();
+        std::future<decltype(func(args...))> future = promise->get_future();
 
         auto task = [this](std::shared_ptr< std::promise<decltype(func(args...))> > p,
                        Func func, Args... args) {
