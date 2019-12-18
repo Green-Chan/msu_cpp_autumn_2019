@@ -7,8 +7,8 @@ class Allocator
 {
 public:
     using value_type = T;
-	using pointer = T*;
-	using size_type = size_t;
+    using pointer = T*;
+    using size_type = size_t;
     pointer allocate(size_type n) {
         return static_cast<pointer> (::operator new(n * sizeof(value_type)));
     }
@@ -131,22 +131,22 @@ class Vector
 {
 public:
     using iterator = Iterator<T>;
-	using value_type = T;
-	using pointer = T*;
-	using size_type = size_t;
-	using reference = T&;
+    using value_type = T;
+    using pointer = T*;
+    using size_type = size_t;
+    using reference = T&;
     Vector(size_type vec_size = 0) {
-	    v_size = vec_size;
-		if (v_size > 0) {
-			real_size = v_size;
-		}
-		data = alloc.allocate(real_size);
-		for (size_type i = 0; i < v_size; ++i) {
-			alloc.construct(data + i);
-		}
-	}
+        v_size = vec_size;
+        if (v_size > 0) {
+            real_size = v_size;
+        }
+        data = alloc.allocate(real_size);
+        for (size_type i = 0; i < v_size; ++i) {
+            alloc.construct(data + i);
+        }
+    }
 
-	~Vector() {
+    ~Vector() {
         for (auto i = data; i != data + v_size; i++) {
             alloc.destroy(i);
         }
@@ -154,38 +154,38 @@ public:
     }
 
     reference operator[] (size_type n) {
-		if (n >= v_size) {
-			throw std::out_of_range("Out of range");
-		}
-		return data[n];
-	}
-	const reference operator[] (size_type n) const {
-		if (n >= v_size)
-			throw std::out_of_range("Out of range");
-		return data[n];
-	}
+        if (n >= v_size) {
+            throw std::out_of_range("Out of range");
+        }
+        return data[n];
+    }
+    const reference operator[] (size_type n) const {
+        if (n >= v_size)
+            throw std::out_of_range("Out of range");
+        return data[n];
+    }
 
-	void push_back(value_type&& value) {
-		if (v_size == real_size) {
-			reserve(real_size * 2);
-		}
-		data[v_size++] = value;
-	}
-	void push_back(const value_type& value) {
-		if (v_size == real_size) {
-			reserve(real_size * 2);
-		}
-		data[v_size++] = value;
-	}
+    void push_back(value_type&& value) {
+        if (v_size == real_size) {
+            reserve(real_size * 2);
+        }
+        data[v_size++] = std::move(value);
+    }
+    void push_back(const value_type& value) {
+        if (v_size == real_size) {
+            reserve(real_size * 2);
+        }
+        new (data + v_size++) value_type(value);
+    }
 
-	void pop_back()
-	{
-		if (v_size > 0) {
+    void pop_back()
+    {
+        if (v_size > 0) {
             alloc.destroy(data + --v_size);
-		}
-	}
+        }
+    }
 
-	bool empty() const {
+    bool empty() const {
         return v_size == 0;
     }
 
@@ -198,48 +198,48 @@ public:
     }
 
     void clear() noexcept {
-		resize(0);
-	}
+        resize(0);
+    }
 
-	iterator begin() const noexcept {
-		return iterator(data, false);
-	}
+    iterator begin() const noexcept {
+        return iterator(data, false);
+    }
 
-	iterator end() const noexcept {
-		return iterator(data + v_size, false);
-	}
+    iterator end() const noexcept {
+        return iterator(data + v_size, false);
+    }
 
-	iterator rbegin() const noexcept {
-		return iterator(data + v_size - 1, true);
-	}
+    iterator rbegin() const noexcept {
+        return iterator(data + v_size - 1, true);
+    }
 
-	iterator rend() const noexcept {
-		return iterator(data - 1, true);
-	}
+    iterator rend() const noexcept {
+        return iterator(data - 1, true);
+    }
 
     void resize(size_type n) {
         if (real_size < n) {
-			reserve(n);
-		}
-		for (size_type i = n; i < v_size; i++) {
+            reserve(n);
+        }
+        for (size_type i = n; i < v_size; i++) {
             alloc.destroy(data + i);
         }
         for (size_type i = v_size; i < n; i++) {
             alloc.construct(data + i);
         }
-		v_size = n;
+        v_size = n;
     }
 
     void reserve(size_type n) {
-		pointer new_data = alloc.allocate(n);
-		for (size_type i = 0; i < real_size; ++i) {
-			alloc.construct(new_data + i, *(data + i));
-			alloc.destroy(data + i);
-		}
-		alloc.deallocate(data, real_size);
-		data = new_data;
-		real_size = n;
-	}
+        pointer new_data = alloc.allocate(n);
+        for (size_type i = 0; i < real_size; ++i) {
+            alloc.construct(new_data + i, *(data + i));
+            alloc.destroy(data + i);
+        }
+        alloc.deallocate(data, real_size);
+        data = new_data;
+        real_size = n;
+    }
 
 private:
     size_type v_size, real_size = 1;
