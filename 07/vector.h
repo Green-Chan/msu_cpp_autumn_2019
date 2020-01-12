@@ -169,7 +169,7 @@ public:
         if (v_size == real_size) {
             reserve(real_size * 2);
         }
-        data[v_size++] = std::move(value);
+        new (data + v_size++) = std::move(value);
     }
     void push_back(const value_type& value) {
         if (v_size == real_size) {
