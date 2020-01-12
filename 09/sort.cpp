@@ -10,7 +10,7 @@
 #include <thread>
 
 
-enum { SIZE = 4 * 1024 * 1024 / sizeof(uint64_t) - 100};
+const size_t SIZE = 4 * 1024 * 1024 / sizeof(uint64_t) - 100;
 
 using namespace std;
 
