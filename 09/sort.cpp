@@ -24,18 +24,18 @@ void chunk_sort(ifstream &fin, mutex &f_mutex, size_t &fnum, mutex &n_mutex) {
                 break;
             }
         }
-		if (top == 0) {
-		    delete[] arr;
-        	return;
- 	    }
-	    size_t tmp_fnum;
-	    {
-	        lock_guard<mutex> guard(n_mutex);
-			tmp_fnum = fnum++;
-	    }
-	    sort(arr, arr + top);
-	    ofstream fout("sort_" + to_string(tmp_fnum) + ".bin", ios::binary);
-		fout.write((char *) arr, top * sizeof(arr[0]));
+        if (top == 0) {
+            delete[] arr;
+            return;
+         }
+        size_t tmp_fnum;
+        {
+            lock_guard<mutex> guard(n_mutex);
+            tmp_fnum = fnum++;
+        }
+        sort(arr, arr + top);
+        ofstream fout("sort_" + to_string(tmp_fnum) + ".bin", ios::binary);
+        fout.write((char *) arr, top * sizeof(arr[0]));
     }
 }
 
