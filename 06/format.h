@@ -5,9 +5,7 @@
 #include <stdexcept>
 #include <vector>
 
-void form_vector(std::vector<std::string>& vect) {
-    return;
-}
+void form_vector(std::vector<std::string>& vect);
 
 template <class T, class... Args>
 void form_vector(std::vector<std::string>& vect, const T& val, const Args&... args) {
