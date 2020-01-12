@@ -49,10 +49,10 @@ void thread_file_sort(const string &ifn, const string &ofn) {
     t2.join();
     priority_queue< pair<uint64_t, size_t>, vector< pair<uint64_t, size_t> >, std::greater< pair<uint64_t, size_t> > > q;
     vector<ifstream> f_vec;
-    for (int i = 0; i < num; i++) {
+    for (size_t i = 0; i < num; i++) {
         f_vec.emplace_back("sort_" + to_string(i) + ".bin", ios::binary);
     }
-    for (int i = 0; i < num; i++) {
+    for (size_t i = 0; i < num; i++) {
         int64_t cur;
         f_vec[i].read((char *) &cur, sizeof(cur));
         q.push({cur, i});
