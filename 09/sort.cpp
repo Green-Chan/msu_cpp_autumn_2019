@@ -8,7 +8,7 @@
 #include <vector>
 #include <mutex>
 #include <thread>
-
+#include <stdexcept>
 
 const size_t SIZE = 4 * 1024 * 1024 / sizeof(uint64_t) - 100;
 
@@ -35,12 +35,18 @@ void chunk_sort(ifstream &fin, mutex &f_mutex, size_t &fnum, mutex &n_mutex) {
         }
         sort(arr, arr + top);
         ofstream fout("sort_" + to_string(tmp_fnum) + ".bin", ios::binary);
+        if (!fout.is_open()) {
+            throw runtime_error("file " + "sort_" + to_string(tmp_fnum) + ".bin" + " cannot be open");
+        }
         fout.write((char *) arr, top * sizeof(arr[0]));
     }
 }
 
 void thread_file_sort(const string &ifn, const string &ofn) {
     ifstream fin(ifn, ios::binary);
+    if (!fin.is_open()) {
+        throw runtime_error("file " + ifn + " cannot be open");
+    }
     mutex m1, m2;
     size_t num = 0;
     thread t1(chunk_sort, ref(fin), ref(m1), ref(num), ref(m2));
@@ -51,6 +57,9 @@ void thread_file_sort(const string &ifn, const string &ofn) {
     vector<ifstream> f_vec;
     for (size_t i = 0; i < num; i++) {
         f_vec.emplace_back("sort_" + to_string(i) + ".bin", ios::binary);
+        if (!f_vec[f_vec.size() - 1].is_open()) {
+            throw runtime_error("file " + "sort_" + to_string(i) + ".bin", ios::binary + " cannot be open");
+        }
     }
     for (size_t i = 0; i < num; i++) {
         int64_t cur;
@@ -58,6 +67,9 @@ void thread_file_sort(const string &ifn, const string &ofn) {
         q.push({cur, i});
     }
     ofstream fout(ofn, ios::binary);
+    if (!fout.is_open()) {
+        throw runtime_error("file " + ofn + " cannot be open");
+    }
     while (!q.empty()) {
         fout.write((char *) &q.top(), sizeof(q.top().first));
         int64_t cur;
@@ -68,6 +80,8 @@ void thread_file_sort(const string &ifn, const string &ofn) {
     }
     for (size_t i = 0; i < num; i++) {
         f_vec[i].close();
-        remove(("sort_" + to_string(i) + ".bin").c_str());
+        if (remove(("sort_" + to_string(i) + ".bin").c_str())) {
+            throw runtime_error("file: " + "sort_" + to_string(i) + ".bin" + " cannot be removed, next files will NOT be deleted.");
+        }
     }
 }
